@@ -8,7 +8,7 @@
     }
 
     function displayWeather(elementId, location) {
-      fetch(`http://abc123.ngrok.io/weather?location=${location}`)  // Replace with your ngrok URL
+      fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`)  // Replace with your ngrok URL
         .then(response => response.json())
         .then(data => {
           const weatherElement = document.getElementById(elementId);
