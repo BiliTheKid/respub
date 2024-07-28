@@ -31,6 +31,12 @@ async function loadWeather() {
         const text = await response.text();
         console.log("Response Text:", text);
 
+        if (response.headers.get('Content-Type') !== 'application/json') {
+            console.error(`Unexpected Content-Type: ${response.headers.get('Content-Type')}`);
+            widgetElement.innerText = 'Error fetching weather data: unexpected content type.';
+            return;
+        }
+
         try {
             const data = JSON.parse(text);
 
