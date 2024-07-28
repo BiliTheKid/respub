@@ -1,26 +1,27 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import requests
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
 app = FastAPI()
 
-API_URL = 'https://api.weatherapi.com/v1/current.json'
-API_KEY = os.getenv('API_KEY')  # Replace with your actual API key
+load_dotenv()
+
+origins = ["*"]
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"])
+
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+WEATHER_API_URL = "http://api.weatherapi.com/v1/current.json"
 
 @app.get("/weather")
-async def get_weather(location: str):
-    if not location:
-        raise HTTPException(status_code=400, detail="Location parameter is required")
-
-    response = requests.get(API_URL, params={'key': API_KEY, 'q': location})
-    if response.status_code != 200:
-        raise HTTPException(status_code=500, detail="Failed to fetch weather data")
-
-    return JSONResponse(content=response.json())
+def get_weather(location: str):
+    try:
+        response = requests.get(f"{WEATHER_API_URL}?key={WEATHER_API_KEY}&q={location}")
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn

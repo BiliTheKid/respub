@@ -1,43 +1,32 @@
-(function() {
-  const script = document.createElement('script');
-  script.src = 'https://bilithekid.github.io/respub/sdk-respub.js'; // Replace with the actual URL of your SDK
-  script.onload = function() {
-    if (typeof WeatherSDK === 'undefined') {
-      console.error('WeatherSDK is not loaded');
-      return;
-    }
+(async () => {
+  const location = document.currentScript.getAttribute('data-location');
+  const elementId = document.currentScript.getAttribute('data-element-id');
+  const widgetElement = document.getElementById(elementId);
 
-    function displayWeather(elementId, location) {
-      fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`)  // Replace with your ngrok URL
-        .then(response => response.json())
-        .then(data => {
-          const weatherElement = document.getElementById(elementId);
-          if (weatherElement) {
-            weatherElement.innerHTML = `
+  if (!widgetElement) {
+      console.error(`Element with ID '${elementId}' not found.`);
+      return;
+  }
+
+  try {
+      const response = await fetch(`https:// https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`);
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      if (data.error) {
+          widgetElement.innerText = `Error fetching weather data: ${data.error}`;
+      } else {
+          widgetElement.innerHTML = `
               <h3>Weather in ${data.location.name}</h3>
               <p>${data.current.condition.text}</p>
-              <p>Temperature: ${data.current.temp_c} °C</p>
-            `;
-          } else {
-            console.error('Element with id ' + elementId + ' not found.');
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching weather data:', error);
-        });
-    }
-
-    const scriptTags = document.getElementsByTagName('script');
-    const currentScript = scriptTags[scriptTags.length - 1];
-    const location = currentScript.getAttribute('data-location');
-    const elementId = currentScript.getAttribute('data-element-id');
-
-    if (location && elementId) {
-      displayWeather(elementId, location);
-    } else {
-      console.error('Missing data-location or data-element-id attribute.');
-    }
-  };
-
-  document.head.appendChild(script);
+              <p>${data.current.temp_c}°C</p>
+              <p>Humidity: ${data.current.humidity}%</p>
+          `;
+      }
+  } catch (error) {
+      console.error(`Error fetching weather data: ${error}`);
+      widgetElement.innerText = 'Error fetching weather data.';
+  }
 })();
