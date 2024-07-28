@@ -1,6 +1,6 @@
 (function() {
   const script = document.createElement('script');
-  script.src = 'https://your-cdn.com/path/to/sdk.js'; // Replace with the actual URL of your SDK
+  script.src = 'https://bilithekid.github.io/respub/sdk-respub.js'; // Replace with the actual URL of your SDK
   script.onload = function() {
     if (typeof WeatherSDK === 'undefined') {
       console.error('WeatherSDK is not loaded');
