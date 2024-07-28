@@ -1,5 +1,11 @@
 async function loadWeather() {
     const scriptElement = document.querySelector('script[src*="sdk-respub.js"]');
+    
+    if (!scriptElement) {
+        console.error("Script element not found.");
+        return;
+    }
+
     const location = scriptElement.getAttribute('data-location');
     const elementId = scriptElement.getAttribute('data-element-id');
     const widgetElement = document.getElementById(elementId);
