@@ -1,4 +1,25 @@
 from fastapi import FastAPI
+import httpx
+import os
+from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
+
+load_dotenv()
+
+app = FastAPI()
+
+WEATHER_API_KEY = os.getenv("API_KEY")
+
+@app.get("/weather")
+async def get_weather(location: str):
+    url = f"http://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q={location}&aqi=no"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        if response.status_code != 200:
+            return JSONResponse(content={"error": "Failed to fetch weather data"}, status_code=response.status_code)
+        data = response.json()
+        return JSONResponse(content=data)
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 import os
