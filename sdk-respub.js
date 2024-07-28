@@ -16,7 +16,7 @@ async function loadWeather() {
     }
 
     try {
-        const response = await fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`);
+        const response = await fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=tel-aviv`);
         
         // Check if the response is in JSON format
         const contentType = response.headers.get('Content-Type');
