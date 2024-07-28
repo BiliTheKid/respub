@@ -6,8 +6,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI()
 
+
+app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust as needed
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 WEATHER_API_KEY = os.getenv("API_KEY")
 
 @app.get("/weather")
