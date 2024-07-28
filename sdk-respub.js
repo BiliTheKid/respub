@@ -17,38 +17,32 @@ async function loadWeather() {
 
     try {
         const response = await fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=tel-aviv`);
-        
-        // Check if the response is in JSON format
+
+        // Log status code and headers
+        console.log("Response status:", response.status);
+        console.log("Response headers:", [...response.headers.entries()]);
+
         const contentType = response.headers.get('Content-Type');
         if (!contentType || !contentType.includes('application/json')) {
-            console.error(`Unexpected Content-Type: ${contentType}`);
+            const text = await response.text();
+            console.error(`Unexpected Content-Type: ${contentType}\nResponse Body: ${text}`);
             widgetElement.innerText = 'Error fetching weather data: unexpected content type.';
             return;
         }
 
-        const text = await response.text();
-        console.log("Raw response text:", text);  // Debug log
-
-        try {
-            const data = JSON.parse(text);
-            if (data.error) {
-                widgetElement.innerText = `Error fetching weather data: ${data.error}`;
-            } else {
-                widgetElement.innerHTML = `
-                    <h3>Weather in ${data.location.name}</h3>
-                    <p>${data.current.condition.text}</p>
-                    <p>${data.current.temp_c}°C</p>
-                    <p>Humidity: ${data.current.humidity}%</p>
-                `;
-            }
-        } catch (jsonError) {
-            console.error("Failed to parse JSON:", text);
-            widgetElement.innerText = 'Error fetching weather data: invalid JSON response.';
+        const data = await response.json();
+        if (data.error) {
+            widgetElement.innerText = `Error fetching weather data: ${data.error}`;
+        } else {
+            widgetElement.innerHTML = `
+                <h3>Weather in ${data.location.name}</h3>
+                <p>${data.current.condition.text}</p>
+                <p>${data.current.temp_c}°C</p>
+                <p>Humidity: ${data.current.humidity}%</p>
+            `;
         }
     } catch (error) {
         console.error(`Error fetching weather data: ${error}`);
         widgetElement.innerText = 'Error fetching weather data.';
     }
 }
-
-window.loadWeather = loadWeather;
