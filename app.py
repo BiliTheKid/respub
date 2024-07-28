@@ -11,7 +11,7 @@ load_dotenv()
 origins = ["*"]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"])
 
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+WEATHER_API_KEY = os.getenv("API_KEY")
 WEATHER_API_URL = "http://api.weatherapi.com/v1/current.json"
 
 @app.get("/weather")
