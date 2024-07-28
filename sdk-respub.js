@@ -1,14 +1,35 @@
-// sdk.js
-var WeatherSDK = (function() {
-    function getWeather(location) {
-        return fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`)
-            .then(response => response.json())
-            .catch(error => {
-                console.error('Error fetching weather data:', error);
-            });
+async function loadWeather() {
+    const location = document.currentScript.getAttribute('data-location');
+    const elementId = document.currentScript.getAttribute('data-element-id');
+    const widgetElement = document.getElementById(elementId);
+
+    if (!widgetElement) {
+        console.error(`Element with ID '${elementId}' not found.`);
+        return;
     }
 
-    return {
-        getWeather: getWeather
-    };
-})();
+    try {
+        const response = await fetch(`https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        if (data.error) {
+            widgetElement.innerText = `Error fetching weather data: ${data.error}`;
+        } else {
+            widgetElement.innerHTML = `
+                <h3>Weather in ${data.location.name}</h3>
+                <p>${data.current.condition.text}</p>
+                <p>${data.current.temp_c}°C</p>
+                <p>Humidity: ${data.current.humidity}%</p>
+            `;
+        }
+    } catch (error) {
+        console.error(`Error fetching weather data: ${error}`);
+        widgetElement.innerText = 'Error fetching weather data.';
+    }
+}
+
+// Expose loadWeather function globally to be callable from the HTML
+window.loadWeather = loadWeather;

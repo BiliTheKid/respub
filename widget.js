@@ -9,7 +9,7 @@
   }
 
   try {
-      const response = await fetch(`https:// https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`);
+      const response = await fetch(`https://https://16d4-147-235-200-38.ngrok-free.app/weather?location=${location}`);
       if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
