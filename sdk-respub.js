@@ -1,6 +1,7 @@
 async function loadWeather() {
-    const location = document.currentScript.getAttribute('data-location');
-    const elementId = document.currentScript.getAttribute('data-element-id');
+    const scriptElement = document.querySelector('script[src*="sdk-respub.js"]');
+    const location = scriptElement.getAttribute('data-location');
+    const elementId = scriptElement.getAttribute('data-element-id');
     const widgetElement = document.getElementById(elementId);
 
     if (!widgetElement) {
