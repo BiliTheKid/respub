@@ -15,7 +15,7 @@ async function loadWeather() {
         return;
     }
 
-    const apiUrl = `https://16d4-147-235-200-38.ngrok-free.app/weather?location=${encodeURIComponent(location)}`;
+    const apiUrl = `https://8062-147-235-204-123.ngrok-free.app/weather?location=${encodeURIComponent(location)}`;
 
     try {
         const response = await fetch(apiUrl);
