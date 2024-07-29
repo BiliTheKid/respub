@@ -18,7 +18,11 @@ async function loadWeather() {
     const apiUrl = `https://8062-147-235-204-123.ngrok-free.app/weather?location=${encodeURIComponent(location)}`;
 
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+            headers: {
+                'ngrok-skip-browser-warning': 'true'
+            }
+        });
 
         console.log("Response Status:", response.status);
         console.log("Response Headers:", [...response.headers.entries()]); // Log all headers
