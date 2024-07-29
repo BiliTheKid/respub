@@ -24,16 +24,11 @@ async function loadWeather() {
             }
         });
 
-        console.log("Response Status:", response.status);
-        console.log("Response Headers:", [...response.headers.entries()]); // Log all headers
-        console.log("Response URL:", response.url); // Log the request URL
-
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const text = await response.text();
-        console.log("Response Text:", text);
 
         if (response.headers.get('Content-Type') !== 'application/json') {
             console.error(`Unexpected Content-Type: ${response.headers.get('Content-Type')}`);
