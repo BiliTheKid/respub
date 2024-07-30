@@ -19,12 +19,6 @@ WEATHER_API_KEY = os.getenv("API_KEY")
 @app.get("/weather")
 async def get_weather(location: str):
     url = f"http://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q={location}&aqi=no"
-    stories = [
-        "https://www.instagram.com/stories/highlights/18048444139826823/",
-        "https://www.instagram.com/stories/highlights/17918019785941773/",
-"https://www.instagram.com/stories/highlights/18266439469170133/",
-"https://www.instagram.com/stories/highlights/18000467906625516/"
-    ]
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         
@@ -46,7 +40,7 @@ async def get_weather(location: str):
         except ValueError as json_err:
             return JSONResponse(content={"error": f"Failed to parse JSON: {str(json_err)}"}, status_code=500)
         
-        return JSONResponse(content=stories)
+        return JSONResponse(content=data)
         
 if __name__ == "__main__":
     import uvicorn
