@@ -73,8 +73,10 @@ async function loadWeather() {
                 }
                 .circle-container {
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: row; /* Ensures horizontal layout */
                     justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap; /* Allows wrapping to new lines if needed */
                 }
             `;
             document.head.appendChild(style);
