@@ -1,5 +1,3 @@
-// sdk-respub.js
-
 async function loadWeather() {
     const scriptElement = document.querySelector('script[src*="sdk-respub.js"]');
     
@@ -98,7 +96,12 @@ async function loadWeather() {
                 });
             }
 
-            loadCircles(circleData, widgetElement);
+            // Add a container for the circles
+            const circleContainer = document.createElement('div');
+            circleContainer.className = 'circle-container';
+            widgetElement.appendChild(circleContainer);
+
+            loadCircles(circleData, circleContainer);
         } catch (jsonError) {
             console.error("Failed to parse JSON:", text);
             widgetElement.innerText = 'Error fetching weather data: invalid JSON response.';
