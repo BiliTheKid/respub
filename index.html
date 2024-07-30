@@ -1,50 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer News</title>
-    <style>
-        /* Add your styles here */
-    </style>
+    <title>Weather Widget</title>
+    <script src="path/to/sdk-respub.js" data-location="New York" data-element-id="circle-container"></script>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Soccer News</h1>
-            <p>Your source for the latest soccer news and updates</p>
-        </div>
-    </header>
-
-    <div class="container">
-        <!-- Weather Widget -->
-        <div id="weather-widget"></div>
-        <button id="load-weather">Load Weather</button>
-        <!-- Include the SDK with the location set to "London" -->
-        <script src="https://bilithekid.github.io/respub/sdk-respub.js" data-location="London" data-element-id="weather-widget"></script>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Soccer News. All rights reserved.</p>
-    </footer>
-
-    <script>
-        document.getElementById('load-weather').addEventListener('click', () => {
-            if (window.loadWeather) {
-                window.loadWeather();
-            } else {
-                console.error('loadWeather function is not defined');
-            }
-        });
-
-        // Automatically load weather on page load
-        window.onload = () => {
-            if (window.loadWeather) {
-                window.loadWeather();
-            } else {
-                console.error('loadWeather function is not defined');
-            }
-        };
-    </script>
+<body onload="loadWeather()">
+    <div id="circle-container" class="circle-container"></div>
 </body>
 </html>
+
