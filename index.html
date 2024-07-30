@@ -17,7 +17,7 @@
     </header>
 
     <div class="container">
-        <!-- Weather Widget -->
+        <!-- Stories Widget -->
         <div id="weather-widget"></div>
         <button id="load-weather">Load Weather</button>
         <!-- Include the SDK with the location set to "London" -->
@@ -30,19 +30,19 @@
 
     <script>
         document.getElementById('load-weather').addEventListener('click', () => {
-            if (window.loadWeather) {
-                window.loadWeather();
+            if (window.loadStories) {
+                window.loadStories();
             } else {
-                console.error('loadWeather function is not defined');
+                console.error('loadStories function is not defined');
             }
         });
 
-        // Automatically load weather on page load
+        // Automatically load stories on page load
         window.onload = () => {
-            if (window.loadWeather) {
-                window.loadWeather();
+            if (window.loadStories) {
+                window.loadStories();
             } else {
-                console.error('loadWeather function is not defined');
+                console.error('loadStories function is not defined');
             }
         };
     </script>
