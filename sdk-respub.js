@@ -1,11 +1,12 @@
-async function loadStories() {
+async function loadWeather() {
     const scriptElement = document.querySelector('script[src*="sdk-respub.js"]');
-
+    
     if (!scriptElement) {
         console.error("Script element not found.");
         return;
     }
 
+    const location = scriptElement.getAttribute('data-location') || 'London'; // Default location if not specified
     const elementId = scriptElement.getAttribute('data-element-id');
     const widgetElement = document.getElementById(elementId);
 
@@ -14,7 +15,7 @@ async function loadStories() {
         return;
     }
 
-    const apiUrl = `https://8062-147-235-204-123.ngrok-free.app/stories`;
+    const apiUrl = `https://8062-147-235-204-123.ngrok-free.app/weather?location=${encodeURIComponent(location)}`;
 
     try {
         const response = await fetch(apiUrl, {
@@ -31,7 +32,7 @@ async function loadStories() {
 
         if (response.headers.get('Content-Type') !== 'application/json') {
             console.error(`Unexpected Content-Type: ${response.headers.get('Content-Type')}`);
-            widgetElement.innerText = 'Error fetching stories data: unexpected content type.';
+            widgetElement.innerText = 'Error fetching weather data: unexpected content type.';
             return;
         }
 
@@ -39,13 +40,18 @@ async function loadStories() {
             const data = JSON.parse(text);
 
             if (data.error) {
-                widgetElement.innerText = `Error fetching stories data: ${data.error}`;
+                widgetElement.innerText = `Error fetching weather data: ${data.error}`;
                 return;
             }
 
             widgetElement.innerHTML = ''; // Clear previous content
 
-            const circleData = data.stories.map((story, index) => ({ text: `Story ${index + 1}`, url: story }));
+            const circleData = [
+                { text: `Location: ${data.location.name}` },
+                { text: `Condition: ${data.current.condition.text}` },
+                { text: `Temperature: ${data.current.temp_c}°C` },
+                { text: `Humidity: ${data.current.humidity}%` }
+            ];
 
             // Create and append styles
             const style = document.createElement('style');
@@ -62,7 +68,6 @@ async function loadStories() {
                     margin: 10px;
                     font-size: 14px;
                     text-align: center;
-                    cursor: pointer;
                 }
                 .circle-container {
                     display: flex;
@@ -75,11 +80,10 @@ async function loadStories() {
             document.head.appendChild(style);
 
             // Function to create a circle element
-            function createCircle(text, url) {
+            function createCircle(text) {
                 const circle = document.createElement('div');
                 circle.className = 'circle';
                 circle.innerText = text;
-                circle.onclick = () => window.open(url, '_blank'); // Open story in a new tab
                 return circle;
             }
 
@@ -87,7 +91,7 @@ async function loadStories() {
             function loadCircles(data, container) {
                 container.innerHTML = ''; // Clear existing circles if any
                 data.forEach(item => {
-                    const circle = createCircle(item.text, item.url);
+                    const circle = createCircle(item.text);
                     container.appendChild(circle);
                 });
             }
@@ -100,12 +104,16 @@ async function loadStories() {
             loadCircles(circleData, circleContainer);
         } catch (jsonError) {
             console.error("Failed to parse JSON:", text);
-            widgetElement.innerText = 'Error fetching stories data: invalid JSON response.';
+            widgetElement.innerText = 'Error fetching weather data: invalid JSON response.';
         }
     } catch (error) {
-        console.error(`Error fetching stories data: ${error.message}`);
-        widgetElement.innerText = `Error fetching stories data: ${error.message}`;
+        console.error(`Error fetching weather data: ${error.message}`);
+        widgetElement.innerText = `Error fetching weather data: ${error.message}`;
     }
 }
 
-window.loadStories = loadStories;
+window.loadWeather = loadWeather;
+
+
+
+
