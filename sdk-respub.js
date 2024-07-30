@@ -14,7 +14,7 @@ async function loadStories() {
         return;
     }
 
-    const apiUrl = `https://your-ngrok-url.ngrok-free.app/stories`;
+    const apiUrl = `https://8062-147-235-204-123.ngrok-free.app/stories`;
 
     try {
         const response = await fetch(apiUrl, {
