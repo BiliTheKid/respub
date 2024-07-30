@@ -46,12 +46,14 @@ async function loadWeather() {
 
             widgetElement.innerHTML = ''; // Clear previous content
 
-            const circleData = [
-                { text: `Location: ${data.location.name}` },
-                { text: `Condition: ${data.current.condition.text}` },
-                { text: `Temperature: ${data.current.temp_c}°C` },
-                { text: `Humidity: ${data.current.humidity}%` }
-            ];
+            // const circleData = [
+            //     { text: `Location: ${data.location.name}` },
+            //     { text: `Condition: ${data.current.condition.text}` },
+            //     { text: `Temperature: ${data.current.temp_c}°C` },
+            //     { text: `Humidity: ${data.current.humidity}%` }
+            // ];
+            const circleData = data.stories.map((story, index) => ({ text: `Story ${index + 1}`, url: story }));
+
 
             // Create and append styles
             const style = document.createElement('style');
