@@ -1,4 +1,4 @@
-async function loadWeather() {
+async function loadHighlights() {
     const scriptElement = document.querySelector('script[src*="sdk-respub.js"]');
     
     if (!scriptElement) {
@@ -6,7 +6,6 @@ async function loadWeather() {
         return;
     }
 
-    const location = scriptElement.getAttribute('data-location') || 'London'; // Default location if not specified
     const elementId = scriptElement.getAttribute('data-element-id');
     const widgetElement = document.getElementById(elementId);
 
@@ -15,7 +14,7 @@ async function loadWeather() {
         return;
     }
 
-    const apiUrl = `https://8062-147-235-204-123.ngrok-free.app/weather?location=${encodeURIComponent(location)}`;
+    const apiUrl = `http://127.0.0.1:8000/highlights`; // Ensure this URL is correct
 
     try {
         const response = await fetch(apiUrl, {
@@ -32,7 +31,7 @@ async function loadWeather() {
 
         if (response.headers.get('Content-Type') !== 'application/json') {
             console.error(`Unexpected Content-Type: ${response.headers.get('Content-Type')}`);
-            widgetElement.innerText = 'Error fetching weather data: unexpected content type.';
+            widgetElement.innerText = 'Error fetching highlight data: unexpected content type.';
             return;
         }
 
@@ -40,18 +39,11 @@ async function loadWeather() {
             const data = JSON.parse(text);
 
             if (data.error) {
-                widgetElement.innerText = `Error fetching weather data: ${data.error}`;
+                widgetElement.innerText = `Error fetching highlight data: ${data.error}`;
                 return;
             }
 
             widgetElement.innerHTML = ''; // Clear previous content
-
-            const circleData = [
-                { text: `Location: ${data.location.name}` },
-                { text: `Condition: ${data.current.condition.text}` },
-                { text: `Temperature: ${data.current.temp_c}°C` },
-                { text: `Humidity: ${data.current.humidity}%` }
-            ];
 
             // Create and append styles
             const style = document.createElement('style');
@@ -68,6 +60,7 @@ async function loadWeather() {
                     margin: 10px;
                     font-size: 14px;
                     text-align: center;
+                    text-decoration: none; /* Remove underline */
                 }
                 .circle-container {
                     display: flex;
@@ -80,18 +73,21 @@ async function loadWeather() {
             document.head.appendChild(style);
 
             // Function to create a circle element
-            function createCircle(text) {
-                const circle = document.createElement('div');
-                circle.className = 'circle';
-                circle.innerText = text;
-                return circle;
+            function createCircle(text, link) {
+                const anchor = document.createElement('a');
+                anchor.href = link;
+                anchor.target = '_blank'; // Open link in a new tab
+                anchor.className = 'circle';
+                anchor.innerText = text;
+                return anchor;
             }
 
             // Function to load circles into the specified container
             function loadCircles(data, container) {
                 container.innerHTML = ''; // Clear existing circles if any
-                data.forEach(item => {
-                    const circle = createCircle(item.text);
+                Object.keys(data).forEach(title => {
+                    const link = data[title]; // Get link for the circle
+                    const circle = createCircle(title, link);
                     container.appendChild(circle);
                 });
             }
@@ -101,19 +97,15 @@ async function loadWeather() {
             circleContainer.className = 'circle-container';
             widgetElement.appendChild(circleContainer);
 
-            loadCircles(circleData, circleContainer);
+            loadCircles(data, circleContainer);
         } catch (jsonError) {
             console.error("Failed to parse JSON:", text);
-            widgetElement.innerText = 'Error fetching weather data: invalid JSON response.';
+            widgetElement.innerText = 'Error fetching highlight data: invalid JSON response.';
         }
     } catch (error) {
-        console.error(`Error fetching weather data: ${error.message}`);
-        widgetElement.innerText = `Error fetching weather data: ${error.message}`;
+        console.error(`Error fetching highlight data: ${error.message}`);
+        widgetElement.innerText = `Error fetching highlight data: ${error.message}`;
     }
 }
 
-window.loadWeather = loadWeather;
-
-
-
-
+window.loadHighlights = loadHighlights;

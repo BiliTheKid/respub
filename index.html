@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer News</title>
+    <title>Soccer Highlights</title>
     <style>
         /* Add your styles here */
     </style>
@@ -12,38 +11,38 @@
 <body>
     <header>
         <div class="container">
-            <h1>Soccer News</h1>
-            <p>Your source for the latest soccer news and updates</p>
+            <h1>Soccer Highlights</h1>
+            <p>Your source for the latest soccer highlights and updates</p>
         </div>
     </header>
 
     <div class="container">
-        <!-- Weather Widget -->
-        <div id="weather-widget"></div>
-        <button id="load-weather">Load Weather</button>
-        <!-- Include the SDK with the location set to "London" -->
-        <script src="https://bilithekid.github.io/respub/sdk-respub.js" data-location="London" data-element-id="weather-widget"></script>
+        <!-- Highlights Widget -->
+        <div id="highlights-widget"></div>
+        <button id="load-highlights">Load Highlights</button>
+        <!-- Include the SDK with the element ID set to "highlights-widget" -->
+        <script src="https://bilithekid.github.io/respub/sdk-respub.js" data-element-id="highlights-widget"></script>
     </div>
 
     <footer>
-        <p>&copy; 2024 Soccer News. All rights reserved.</p>
+        <p>&copy; 2024 Soccer Highlights. All rights reserved.</p>
     </footer>
 
     <script>
-        document.getElementById('load-weather').addEventListener('click', () => {
-            if (window.loadWeather) {
-                window.loadWeather();
+        document.getElementById('load-highlights').addEventListener('click', () => {
+            if (window.loadHighlights) {
+                window.loadHighlights();
             } else {
-                console.error('loadWeather function is not defined');
+                console.error('loadHighlights function is not defined');
             }
         });
 
-        // Automatically load weather on page load
+        // Automatically load highlights on page load
         window.onload = () => {
-            if (window.loadWeather) {
-                window.loadWeather();
+            if (window.loadHighlights) {
+                window.loadHighlights();
             } else {
-                console.error('loadWeather function is not defined');
+                console.error('loadHighlights function is not defined');
             }
         };
     </script>
