@@ -14,7 +14,7 @@ async function loadHighlights() {
         return;
     }
 
-    const apiUrl = `http://127.0.0.1:8000/highlights`; // Ensure this URL is correct
+    const apiUrl = `https://respub.onrender.com/highlights`; // Ensure this URL is correct
 
     try {
         const response = await fetch(apiUrl, {
