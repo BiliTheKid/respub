@@ -49,6 +49,7 @@ async function loadHighlights() {
             const style = document.createElement('style');
             style.innerHTML = `
                 .circle {
+
                     width: 70px;
                     height: 70px;
                     border-radius: 50%;
@@ -58,6 +59,7 @@ async function loadHighlights() {
                     align-items: center;
                     justify-content: center;
                     margin: 5px;
+                    padding: 5x;
                     font-size: 14px;
                     text-align: center;
                     text-decoration: none; /* Remove underline */
