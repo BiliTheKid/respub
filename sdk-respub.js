@@ -60,7 +60,7 @@ async function loadHighlights() {
                     justify-content: center;
                     margin: 5px;
                     padding: 5x;
-                    font-size: 14px;
+                    font-size: 12px;
                     text-align: center;
                     text-decoration: none; /* Remove underline */
                     flex: 0 0 auto; /* Prevent circles from shrinking */
