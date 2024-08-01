@@ -49,8 +49,8 @@ async function loadHighlights() {
             const style = document.createElement('style');
             style.innerHTML = `
                 .circle {
-                    width: 50px;
-                    height: 50px;
+                    width: 70px;
+                    height: 70px;
                     border-radius: 50%;
                     background-color: red;
                     color: white;
