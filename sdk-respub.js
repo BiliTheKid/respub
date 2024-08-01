@@ -75,7 +75,6 @@ async function loadHighlights() {
                     overflow-x: auto;
                     scroll-snap-type: x mandatory;
                     width: 100%;
-                    gap: 10px;
                 }
                 .circle-container .circle {
                     scroll-snap-align: start;
