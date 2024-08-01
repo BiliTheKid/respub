@@ -1,6 +1,6 @@
 async function loadHighlights() {
     const scriptElement = document.querySelector('script[src*="sdk-respub.js"]');
-    
+
     if (!scriptElement) {
         console.error("Script element not found.");
         return;
@@ -49,25 +49,48 @@ async function loadHighlights() {
             const style = document.createElement('style');
             style.innerHTML = `
                 .circle {
-                    width: 100px;
-                    height: 100px;
+                    width: 50px;
+                    height: 50px;
                     border-radius: 50%;
                     background-color: red;
                     color: white;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    margin: 10px;
+                    margin: 5px;
                     font-size: 14px;
                     text-align: center;
                     text-decoration: none; /* Remove underline */
+                    flex: 0 0 auto; /* Prevent circles from shrinking */
+                }
+                .circle-container-wrapper {
+                    display: flex;
+                    overflow: hidden;
                 }
                 .circle-container {
                     display: flex;
-                    flex-direction: row; /* Ensures horizontal layout */
-                    justify-content: center;
-                    align-items: center;
-                    flex-wrap: wrap; /* Allows wrapping to new lines if needed */
+                    flex-direction: row;
+                    overflow-x: auto;
+                    scroll-snap-type: x mandatory;
+                    width: 100%;
+                    gap: 10px;
+                }
+                .circle-container .circle {
+                    scroll-snap-align: start;
+                    flex: 0 0 70px; /* Ensure circles don't shrink and have some space */
+                }
+                .circle-container::-webkit-scrollbar {
+                    display: none; /* Hide scrollbar for WebKit browsers */
+                }
+                @media (min-width: 600px) {
+                    .circle-container .circle {
+                        flex: 0 0 100px; /* Adjust size for larger screens */
+                    }
+                }
+                @media (min-width: 768px) {
+                    .circle-container .circle {
+                        flex: 0 0 120px; /* Adjust size for even larger screens */
+                    }
                 }
             `;
             document.head.appendChild(style);
@@ -85,19 +108,37 @@ async function loadHighlights() {
             // Function to load circles into the specified container
             function loadCircles(data, container) {
                 container.innerHTML = ''; // Clear existing circles if any
-                Object.keys(data).forEach(title => {
-                    const link = data[title]; // Get link for the circle
-                    const circle = createCircle(title, link);
-                    container.appendChild(circle);
-                });
+                const keys = Object.keys(data);
+                const visibleCount = 4; // Number of circles to show at once
+                for (let i = 0; i < keys.length; i++) {
+                    if (i < visibleCount) { // Show only the first 4 circles initially
+                        const title = keys[i];
+                        const link = data[title];
+                        const circle = createCircle(title, link);
+                        container.appendChild(circle);
+                    }
+                }
             }
 
-            // Add a container for the circles
+            // Add a wrapper and container for the circles
+            const circleWrapper = document.createElement('div');
+            circleWrapper.className = 'circle-container-wrapper';
             const circleContainer = document.createElement('div');
             circleContainer.className = 'circle-container';
-            widgetElement.appendChild(circleContainer);
+            circleWrapper.appendChild(circleContainer);
+            widgetElement.appendChild(circleWrapper);
 
             loadCircles(data, circleContainer);
+
+            // Add more circles if needed
+            if (Object.keys(data).length > 4) {
+                const moreCircles = Object.keys(data).slice(4);
+                moreCircles.forEach((title) => {
+                    const link = data[title];
+                    const circle = createCircle(title, link);
+                    circleContainer.appendChild(circle);
+                });
+            }
         } catch (jsonError) {
             console.error("Failed to parse JSON:", text);
             widgetElement.innerText = 'Error fetching highlight data: invalid JSON response.';
@@ -109,3 +150,12 @@ async function loadHighlights() {
 }
 
 window.loadHighlights = loadHighlights;
+
+// Automatically load highlights on page load
+window.onload = () => {
+    if (window.loadHighlights) {
+        window.loadHighlights();
+    } else {
+        console.error('loadHighlights function is not defined');
+    }
+};
